@@ -236,8 +236,9 @@ var allFunctions = function () {
   };
 
   document.body.addEventListener("click", function (event) {
-    if (event.target.matches("input.theButton2")) {
-      console.log("a button2 clicked");
+    if(event.target.matches("input.theButton2") || event.target.matches("input.theButton1")) {
+      var request
+      // Get lat and long
       console.log(event.target.parentNode.parentNode.children);
       var lat, lng;
       var children = event.target.parentNode.parentNode.children;
@@ -246,54 +247,32 @@ var allFunctions = function () {
         if (elem.matches("td[data-col='latitude']")) {
           console.log(elem.textContent);
           lat = elem.textContent;
-          break;
         }
-      }
-
-      children = event.target.parentNode.parentNode.children;
-      for (var i = 0; i < children.length; i++) {
-        let elem = children[i];
         if (elem.matches("td[data-col='longitude']")) {
           console.log(elem.textContent);
           lng = elem.textContent;
+        }
+        if (lat != undefined && lng != undefined) {
           break;
         }
       }
-      cleanupPlaceContent();
-
-      anotherGeonamesRequest(lat, lng);
-    }
-
-    if (event.target.matches("input.theButton1")) {
-      console.log("a button with class theButton1 clicked");
-
-      var lat, lng;
-      var children = event.target.parentNode.parentNode.children;
-      // console.log(children)
-      for (var i = 0; i < children.length; i++) {
-        let elem = children[i];
-        if (elem.matches("td[data-col='latitude']")) {
-          console.log(elem.textContent);
-          lat = elem.textContent;
-          break;
-        }
-      }
-
-      children = event.target.parentNode.parentNode.children;
-      for (var i = 0; i < children.length; i++) {
-        let elem = children[i];
-        if (elem.matches("td[data-col='longitude']")) {
-          console.log(elem.textContent);
-          lng = elem.textContent;
-          break;
-        }
-      }
-
-      // let lat = 0
-      // let lng = 0
-      cleanupMapContent();
       
-      requestWMSmap(lat, lng);
+      // Define behavior
+      if (event.target.matches("input.theButton2")) {
+        console.log("a button2 clicked");
+        request = anotherGeonamesRequest;
+      }
+
+      if (event.target.matches("input.theButton1")) {
+        console.log("a button1 clicked");
+        request = requestWMSmap;
+      }
+
+      if (request != undefined) {
+        cleanupPlaceContent();
+        cleanupMapContent();
+        request(lat, lng);
+      }
     }
   });
 
