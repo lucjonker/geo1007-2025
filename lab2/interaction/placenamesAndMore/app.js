@@ -64,19 +64,38 @@ var allFunctions = function () {
       postalcodeInput = document.querySelector("#postal").value;
       countryInput = document.querySelector("#countrySelect").value;
 
-      var rows = document.querySelectorAll("#resultsTable tr");
-      for (var i = 1; i < rows.length; i++) {
-        rows[i].remove();
-      }
-
-      document.querySelector("main .messages").innerHTML = "";
-      document.querySelector("main .forDebug").innerHTML = "";
+      cleanupPageContent();
 
       getPlacenames_plain_javascript(postalcodeInput, countryInput);
     } else {
       alert("Enter (first part of) postal code");
     }
   };
+
+  var cleanupPageContent = function () {
+    cleanupPostcodeContent();
+    cleanupPlaceContent();
+    cleanupMapContent();
+  }
+
+  var cleanupPostcodeContent = function () {
+    var rows = document.querySelectorAll("#resultsTable tr");
+    for (var i = 1; i < rows.length; i++) {
+      rows[i].remove();
+    }
+    document.querySelector("main .messages").innerHTML = "";
+    document.querySelector("main .forDebug").innerHTML = "";
+  }
+
+  var cleanupPlaceContent = function () {
+    document.querySelector("main .messages2").innerHTML = "";
+    document.querySelector("main .forDebug2").innerHTML = "";
+    document.querySelector("#xmlDataAsTable").innerHTML = "";
+  }
+
+  var cleanupMapContent = function () {
+    document.querySelector("main .mapDiv").innerHTML = "";
+  }
 
   document
     .querySelector("section#geonames button")
@@ -91,11 +110,7 @@ var allFunctions = function () {
         searchFromInput();
       }
     });
-  // };
 
-  // document.addEventListener("DOMContentLoaded", allFunctions);
-
-  //   "use strict";
   var anotherGeonamesRequest = function (latitude, longitude) {
     var baseUrl =
       "http://api.geonames.org/findNearestIntersectionOSM?username=bktudelft";
@@ -220,26 +235,6 @@ var allFunctions = function () {
     getAndDisplayMap(wms_request);
   };
 
-  var searchFromInput = function () {
-    var postalcodeInput;
-    var countryInput;
-
-    if (document.querySelector("section#geonames input").value !== "") {
-      postalcodeInput = document.querySelector("#postal").value;
-      countryInput = document.querySelector("#countrySelect").value;
-      var rows = document.querySelectorAll("#resultsTable tr");
-      for (var i = 1; i < rows.length; i++) {
-        rows[i].remove();
-      }
-      document.querySelector("main .messages").textContent = "";
-      document.querySelector("main .forDebug").textContent = "";
-
-      getPlacenames_plain_javascript(postalcodeInput, countryInput);
-    } else {
-      alert("Enter (first part of) postal code");
-    }
-  };
-
   document.body.addEventListener("click", function (event) {
     if (event.target.matches("input.theButton2")) {
       console.log("a button2 clicked");
@@ -264,6 +259,8 @@ var allFunctions = function () {
           break;
         }
       }
+      cleanupPlaceContent();
+
       anotherGeonamesRequest(lat, lng);
     }
 
@@ -294,9 +291,12 @@ var allFunctions = function () {
 
       // let lat = 0
       // let lng = 0
+      cleanupMapContent();
+      
       requestWMSmap(lat, lng);
     }
   });
 
-document.addEventListener("DOMContentLoaded", allFunctions);
+};
 
+document.addEventListener("DOMContentLoaded", allFunctions);
