@@ -47,9 +47,9 @@ var map = L.map("map-canvas", {
 
 // 2. aerial photo * not working at this moment (see Assignment)
 //    - can be switched on/off by toggle thru L.control.layers (see below in this script)
-var wms_aerial_url = "https://geodata1.nationaalgeoregister.nl/luchtfoto/wms?";
+var wms_aerial_url = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0?";
 var basemap_aerial = new L.tileLayer.wms(wms_aerial_url, {
-  layers: ["luchtfoto_png"],
+  layers: ["2024_orthoHR"],
   styles: "",
   format: "image/png",
   transparent: true,
@@ -71,9 +71,37 @@ var sound = new L.tileLayer.wms(wms_sound_url, {
   pointerCursor: true,
 });
 
+
+// Parcels overlay map
+var wms_geoserver_url = "http://localhost:8080/geoserver/parcels_lucjonker/wms?";
+var parcels = new L.tileLayer.wms(wms_geoserver_url, {
+  layers: ["parcels", "TERREIN_VLAK", "WATERDEEL_VLAK"],
+  styles: ['parcel_style', 'terrein_vlak', 'waterdeel_vlak'],
+  format: "image/png",
+  transparent: true,
+  attribution:
+  '<p>Me!</p>',
+  pointerCursor: true,
+});
+
+// PDOK overlay map
+var wms_pdok_url = "https://service.pdok.nl/bzk/bro-grondwaterspiegeldiepte/wms/v2_0?";
+var pdok = new L.tileLayer.wms(wms_pdok_url, {
+  layers: ["bro-grondwaterspiegeldieptemetingen-GT"],
+  styles: '',
+  format: "image/png",
+  transparent: true,
+  attribution:
+  '<p>PDOK!</p>',
+  pointerCursor: true,
+});
+
 var overlays = {
   "Road noise [WMS]": sound,
+  "Parcels [WMS]": parcels,
+  "PDOK Grondwater [WMS]": pdok,
 };
+
 
 var baseLayers = {
   "BRT-Achtergrondkaart [WMTS]": brtRegular,
