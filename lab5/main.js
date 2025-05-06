@@ -97,7 +97,6 @@ function registerWFSReadAndWriteLayer(mapInstance, toc) {
   var server_url = "https://varioscale.bk.tudelft.nl"
   var layer_name = "pois"
   var geom_column_name = "geom"
-  var namespace_prefix = "geo1007";
   // End Settings
 
   // reading the layer from the WFS
