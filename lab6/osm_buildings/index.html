@@ -135,8 +135,8 @@
     // mdv 2018 geoweb course: switch default osmbuildings vector layer off
     //osmb.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
 
-    var url_wfs = 'https://varioscale.bk.tudelft.nl/geoserver/nl/ows?';
-    var featuretype = 'nl:building';
+    var url_wfs = 'http://localhost:8080/geoserver/geo1007/wms?';
+    var featuretype = 'geo1007:pand_2d_4326';
     var geometryName = 'nl:the_geom';
     // These are the basic parameters for a WFS request 
     //var params = 'service=WFS&version=2.0.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326';
@@ -149,6 +149,9 @@
     params += ',bouwjaar';
     // finally a selection filter, to select the tiles
     params += '&cql_filter=t{z}_x \= {x} and t{z}_y \= {y}';
+
+    // CQL query to get buildings built before 2000 and above 10m height
+    params += ' and bouwjaar > 1960 and bouwjaar < 2005 and floors_est > 2';
 
     // possibility to add another selection criterion, like so
     //params += ' and bouwjaar \< 1850';
